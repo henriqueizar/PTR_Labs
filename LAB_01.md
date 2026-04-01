@@ -11,7 +11,7 @@
 
 ## Cenário
 
-![alt text](image.png)
+![alt text](img/image.png)
 
 ## Recursos
  - Router Cisco IOL (L3)
