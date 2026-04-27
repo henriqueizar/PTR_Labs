@@ -12,9 +12,9 @@
 
 ## Topologia
 
-flowchart TB
-    R["📡 Router R1<br/>G0/0: 192.168.10.1/24<br/>G0/1: 192.168.20.1/24"] --- S1["🔀 SW1"]
-    R --- S2["🔀 SW2"]
+- *1 roteador* - Cisco IOL L3
+- *2 switch Ethernet* - Cisco IOL L2 IRON
+- *2 PCS* - Linux tinycore-6.4
 
-    S1 --- SRC["💻 Host Origem<br/>192.168.10.10/24"]
-    S2 --- RCV["💻 Host Receptor<br/>192.168.20.10/24"]
+<img width="568" height="424" alt="Captura de Tela 2026-04-27 às 16 35 11" src="https://github.com/user-attachments/assets/691731c4-62ac-41ac-a8d6-3448e52df6e1" />
+
