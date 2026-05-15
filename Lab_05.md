@@ -7,7 +7,7 @@
 - Validar conectividade entre redes remotas;
 - Comparar as características básicas de RIP e OSPF.
 
-## Topologia
+# Topologia
 A topologia possui três roteadores interligando três unidades:
 
 Router-RJ - Rio de Janeiro
@@ -114,3 +114,85 @@ flowchart LR
   style BH fill:transparent,stroke:#d97706,stroke-width:2px,stroke-dasharray: 8 6
 
 ```
+
+
+
+# Configuração
+## Hosts
+<img width="584" height="588" alt="image" src="https://github.com/user-attachments/assets/376b9b43-e49b-49f4-8876-db9bf657244a" />
+
+O endereço ip foi feito para os PCs, seguindo esse modelo, que está exmplificando o PC-BH-60-2
+<img width="594" height="161" alt="image" src="https://github.com/user-attachments/assets/ae207957-9e65-45ed-a842-51aae5106938" />
+IP ROUTE BH:
+## Routers
+Após isso, foi configuado cada um dos roteadores (RJ, SP, BH):
+Exemplo configuração router-rj:
+<img width="573" height="319" alt="image" src="https://github.com/user-attachments/assets/f3a207d3-bc85-4664-bd77-0a403d868060" />
+EXEMPLO ROUTER BH:
+Importante: O roteiro original especifica interfaces GigabitEthernet (g0/0, g0/1) e FastEthernet (f0/0, f0/1) para os roteadores. Entretanto, o modelo de roteador disponível no PNetLab possui apenas interfaces Ethernet genéricas (e0/0 a e0/3).
+
+## Verificação inicial sem roteamento dinâmico
+- conectividade apenas entre redes diretamente conectadas;
+- ausência de rotas remotas;
+- tabela de rotas contendo apenas rotas conectadas.
+SHOW IP ROUTE:
+
+
+Os outros Routers mostraram resultados similares.
+
+
+## Configuração do RIP
+Como o cenário usa a faixa 172.16.0.0/16, pode-se anunciar a rede maior 172.16.0.0 no processo RIP.
+Exemplo configuração RIP no Router-RJ:
+<img width="447" height="180" alt="image" src="https://github.com/user-attachments/assets/636d3ba6-4bc5-405f-8ebd-df1cbed3e952" />
+
+## Verificação do RIP
+A verficação foi feita em todos os roteadores. A seguir está a verificação do Router-SP, com função de sumarizar.
+SHOW IP ROUTE(letra R indica caminho aprendido pelo RIP):
+
+SHOW IP PROTOCOLS(RIP funcionando como esperado:
+
+### Resultado Obtido
+- presença de rotas C e L;
+- ausência de rotas aprendidas dinamicamente;
+- pings bem-sucedidos apenas para redes diretamente conectadas.
+
+## Remoção do RIP
+Em cada roteador foi executado:
+
+<img width="221" height="130" alt="image" src="https://github.com/user-attachments/assets/8873421d-ef45-4e86-9b9c-70fb2062f40e" />
+
+## Configuração do OSPF
+
+<img width="633" height="205" alt="image" src="https://github.com/user-attachments/assets/f528ac01-e6d9-4692-81bb-11707baab22c" />
+<img width="638" height="214" alt="image" src="https://github.com/user-attachments/assets/9a1eeaaf-7d00-46fe-82ea-c9e4d4059470" />
+<img width="629" height="199" alt="image" src="https://github.com/user-attachments/assets/9b389dc4-6574-4ecb-b1c2-ca7c6735512a" />
+
+## Verificação do OSPF
+Novamente, a verficação foi feita em todos os roteadores. A seguir está a verificação do Router-SP, com função de sumarizar.
+SHOW IP OSPF NEIGBOR(mostra vizinhos via OSPF):
+
+SHOW IP ROUTE(Letra "O" indica caminho aprendido por OSPF:
+
+SHOW IP PROTOCOLS(OSPF rodando como esperado - pode ser verificado por Distance = 110, comparado ao RIP que é 120):
+
+### Resultado obtido
+- adjacência OSPF formada entre RJ-SP e SP-BH;
+- rotas aprendidas com marcação O;
+- conectividade total entre todas as LANs.
+
+# Testes
+## Teste de alcance 
+A partir de um host do Rio de Janeiro, testar conectividade com São Paulo e Belo Horizonte.
+A partir do PC-RJ-10-1:
+
+# Comparação orientada entre RIP e OSPF
+Após concluir as duas configurações, responder:
+
+1- Qual protocolo foi mais simples de configurar?
+2.Qual protocolo apresentou maior riqueza de informações operacionais?
+3. Qual a principal métrica do RIP?
+4. Qual algoritmo é usado pelo OSPF?
+5. Qual protocolo tende a escalar melhor?
+6. Qual protocolo converge melhor em cenários maiores?
+
