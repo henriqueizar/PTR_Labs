@@ -189,10 +189,16 @@ A partir do PC-RJ-10-1:
 # Comparação orientada entre RIP e OSPF
 Após concluir as duas configurações, responder:
 
-1- Qual protocolo foi mais simples de configurar?
-2.Qual protocolo apresentou maior riqueza de informações operacionais?
+1. Qual protocolo foi mais simples de configurar?
+
+2. Qual protocolo apresentou maior riqueza de informações operacionais?
+
 3. Qual a principal métrica do RIP?
-4. Qual algoritmo é usado pelo OSPF?
-5. Qual protocolo tende a escalar melhor?
-6. Qual protocolo converge melhor em cenários maiores?
+ 
+5. Qual algoritmo é usado pelo OSPF?
+   
+6. Qual protocolo tende a escalar melhor?
+   
+7. Qual protocolo converge melhor em cenários maiores?
+   
 
