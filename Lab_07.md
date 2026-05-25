@@ -303,7 +303,7 @@ show ip bgp: Recebendo rotas do ISP3 e da empresa ✅
 <img width="878" height="493" alt="image" src="https://github.com/user-attachments/assets/cc460b54-88be-4fb9-8986-5b529e815e8d" />
 ---
 
-show ip bgp summary: Vizinhanças com R1 (11.11.11.11) e ISP3 (191.1.0.2) = Established (números 6 e 6)
+show ip bgp summary: vizinhanças com ISP1 (191.1.0.1) e ISP2 (191.2.0.1)
 
 show ip bgp: Todas as rotas aparecem, inclusive mostrando múltiplos caminhos para as redes 181-185.x:
 
@@ -380,3 +380,7 @@ Nos provedores, aparece o prefixo da empresa:
 - `200.18.245.64/27`
 
 Observação sobre testes de conectividade fim-a-fim: Durante os testes adicionais, foram observados comportamentos inconsistentes de ping entre loopbacks distantes (R1 ↔ ISP3), apesar de todas as vizinhanças BGP estarem em estado Established, das rotas serem corretamente aprendidas e propagadas, e da conectividade entre nós adjacentes funcionar normalmente. Investigação extensiva apontou para possíveis limitações do emulador PNetLab no encaminhamento de pacotes em cenários BGP com múltiplos saltos e multipath habilitado.
+
+
+## **Conclusão:**
+O laboratório demonstrou na prática o funcionamento do protocolo BGP entre sistemas autônomos distintos, validando a propagação de prefixos públicos, o estabelecimento de vizinhanças eBGP com loopbacks e enlaces físicos, e o uso de multipath para redundância. Os comportamentos esperados foram observados em todas as etapas de verificação, com as quatro vizinhanças BGP estabelecidas e as rotas devidamente propagadas entre os ASs 1000, 100, 200 e 300.
