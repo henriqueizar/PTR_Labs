@@ -195,67 +195,22 @@ Após concluir as configurações, executamos os comandos de verificação em ca
 #### `show ip bgp summary` em R1
 
 ```
-BGP router identifier 11.11.11.11, local AS number 1000
-BGP table version is 8, main routing table version 8
-7 network entries using 980 bytes of memory
-13 path entries using 1040 bytes of memory
+<img width="880" height="389" alt="image" src="https://github.com/user-attachments/assets/227efa20-c0d8-4619-85e5-851c101daeee" />
 
-Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-10.2.0.2        4          200      16      14        8    0    0 00:07:32        6
-10.10.10.10     4          100      16      14        8    0    0 00:07:41        6
 ```
-
 Mostra as duas vizinhanças (ISP1 via loopback `10.10.10.10` e ISP2 direto `10.2.0.2`) em estado **Established**, ambas com **6 prefixos recebidos** e Up/Down >7 min.
 
 #### `show ip bgp` em R1
 
-```
-     Network          Next Hop            Metric LocPrf Weight Path
- r   10.10.10.10/32   10.2.0.2                               0 200 300 100 i
- r>                   10.10.10.10              0             0 100 i
- *   181.0.0.0/8      10.2.0.2                               0 200 300 i
- *>                   10.10.10.10                            0 100 300 i
- *   182.0.0.0/8      10.2.0.2                               0 200 300 i
- *>                   10.10.10.10                            0 100 300 i
- *   183.0.0.0/8      10.2.0.2                               0 200 300 i
- *>                   10.10.10.10                            0 100 300 i
- *   184.0.0.0/8      10.2.0.2                               0 200 300 i
- *>                   10.10.10.10                            0 100 300 i
- *   185.0.0.0/8      10.2.0.2                               0 200 300 i
- *>                   10.10.10.10                            0 100 300 i
- *>  200.18.245.64/27 0.0.0.0                  0         32768 i
-```
+<img width="872" height="430" alt="image" src="https://github.com/user-attachments/assets/4b5898bb-169a-4522-b2d6-428a56b07998" />
+
 
 Todas as rotas aparecem com **dois caminhos**: via ISP1 (AS-PATH `100 300`) e via ISP2 (`200 300`). O `*>` (best) está sempre no caminho via **ISP1**, comprovando a política weight. O prefixo `200.18.245.64/27` aparece originado localmente (`Weight 32768`).
 
 #### `show ip route` em R1
 
-```
-Gateway of last resort is 10.10.10.10 to network 0.0.0.0
+<img width="874" height="497" alt="image" src="https://github.com/user-attachments/assets/a8c513d0-c6d0-419a-8d24-beb7d137c3eb" />
 
-S*    0.0.0.0/0 [1/0] via 10.10.10.10
-      10.0.0.0/8 is variably subnetted, 7 subnets, 2 masks
-C        10.1.0.0/30 is directly connected, Ethernet0/1
-L        10.1.0.1/32 is directly connected, Ethernet0/1
-C        10.1.0.4/30 is directly connected, Ethernet0/2
-L        10.1.0.5/32 is directly connected, Ethernet0/2
-C        10.2.0.0/30 is directly connected, Ethernet0/3
-L        10.2.0.1/32 is directly connected, Ethernet0/3
-S        10.10.10.10/32 [1/0] via 10.1.0.6
-                        [1/0] via 10.1.0.2
-      11.0.0.0/32 is subnetted, 1 subnets
-C        11.11.11.11 is directly connected, Loopback1
-B     181.0.0.0/8 [20/0] via 10.10.10.10, 00:06:55
-B     182.0.0.0/8 [20/0] via 10.10.10.10, 00:06:55
-B     183.0.0.0/8 [20/0] via 10.10.10.10, 00:06:55
-B     184.0.0.0/8 [20/0] via 10.10.10.10, 00:06:55
-B     185.0.0.0/8 [20/0] via 10.10.10.10, 00:06:55
-      192.168.0.0/24 is variably subnetted, 2 subnets, 2 masks
-C        192.168.0.0/24 is directly connected, Ethernet0/0
-L        192.168.0.1/32 is directly connected, Ethernet0/0
-      200.18.245.0/27 is subnetted, 1 subnets
-S        200.18.245.64 is directly connected, Null0
-```
 
 Confirma:
 
@@ -266,53 +221,20 @@ Confirma:
 
 #### `show ip ospf database` em R1
 
-```
-            OSPF Router with ID (11.11.11.11) (Process ID 10)
+<img width="879" height="262" alt="image" src="https://github.com/user-attachments/assets/e5f56e48-ae07-4a8f-b781-7900b169b6ae" />
 
-		Router Link States (Area 0)
-
-Link ID         ADV Router      Age         Seq#       Checksum Link count
-11.11.11.11     11.11.11.11     443         0x80000003 0x0045E0 2
-
-		Type-5 AS External Link States
-
-Link ID         ADV Router      Age         Seq#       Checksum Tag
-0.0.0.0         11.11.11.11     444         0x80000001 0x0092EA 10
-```
 
 Apenas **uma LSA Type-5**, com Link ID `0.0.0.0` — a default route. Nenhum prefixo externo foi redistribuído. O domínio interno fica limpo, exatamente como a Etapa 4 propõe.
 
 #### `show ip protocols | section ospf` em R1
 
-```
-Routing Protocol is "ospf 10"
-  Router ID 11.11.11.11
-  It is an autonomous system boundary router
- Redistributing External Routes from,
-  Number of areas in this router is 1. 1 normal 0 stub 0 nssa
-  Routing for Networks:
-    11.11.11.11 0.0.0.0 area 0
-    192.168.0.0 0.0.0.255 area 0
-```
+<img width="877" height="317" alt="image" src="https://github.com/user-attachments/assets/616a43f3-fef0-4eba-9657-0389bd88e412" />
 
 A linha `It is an autonomous system boundary router` confirma que o R1 virou ASBR (efeito direto do `default-information originate`).
 
 #### `show running-config | section bgp` em R1
 
-```
-router bgp 1000
- bgp router-id 11.11.11.11
- bgp log-neighbor-changes
- network 200.18.245.64 mask 255.255.255.224
- neighbor 10.2.0.2 remote-as 200
- neighbor 10.2.0.2 password SENHA
- neighbor 10.2.0.2 weight 100
- neighbor 10.10.10.10 remote-as 100
- neighbor 10.10.10.10 password SENHA
- neighbor 10.10.10.10 ebgp-multihop 2
- neighbor 10.10.10.10 update-source Loopback1
- neighbor 10.10.10.10 weight 200
-```
+<img width="880" height="269" alt="image" src="https://github.com/user-attachments/assets/869f9329-f62e-4fec-bbf5-1c0095f215c7" />
 
 Configuração final do BGP: política weight, sessão multihop por loopback e bloco público anunciado.
 
@@ -322,49 +244,20 @@ Configuração final do BGP: política weight, sessão multihop por loopback e b
 
 #### `show ip bgp summary` em ISP1
 
-```
-BGP router identifier 1.1.1.1, local AS number 100
-Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-11.11.11.11     4         1000      15      17        8    0    0 00:08:15        1
-191.1.0.2       4          300      16      15        8    0    0 00:10:24        5
-```
+<img width="881" height="318" alt="image" src="https://github.com/user-attachments/assets/54acf6cf-21b3-4ec9-abc0-9aa912b2c866" />
+
 
 Sessões com R1 (`11.11.11.11`) e ISP3 (`191.1.0.2`) em **Established**. Recebe **1** prefixo do R1 (`200.18.245.64/27`) e **5** prefixos do ISP3 (`181-185.0.0.0/8`).
 
 #### `show ip bgp` em ISP1
 
-```
-     Network          Next Hop            Metric LocPrf Weight Path
- *>   10.10.10.10/32   0.0.0.0                  0         32768 i
- *>   181.0.0.0/8      191.1.0.2                0             0 300 i
- *>   182.0.0.0/8      191.1.0.2                0             0 300 i
- *>   183.0.0.0/8      191.1.0.2                0             0 300 i
- *>   184.0.0.0/8      191.1.0.2                0             0 300 i
- *>   185.0.0.0/8      191.1.0.2                0             0 300 i
- *>   200.18.245.64/27 11.11.11.11              0             0 1000 i
-```
+<img width="800" height="321" alt="image" src="https://github.com/user-attachments/assets/00830395-65fd-4120-ace5-bfd9b23b033e" />
 
 Origina sua loopback `10.10.10.10/32`, repassa os 5 prefixos do ISP3 e recebe o `/27` do R1.
 
 #### `show ip route` em ISP1
 
-```
-      10.0.0.0/8 is variably subnetted, 5 subnets, 2 masks
-C        10.1.0.0/30 is directly connected, Ethernet0/0
-L        10.1.0.2/32 is directly connected, Ethernet0/0
-C        10.1.0.4/30 is directly connected, Ethernet0/1
-L        10.1.0.6/32 is directly connected, Ethernet0/1
-C        10.10.10.10/32 is directly connected, Loopback1
-      11.0.0.0/32 is subnetted, 1 subnets
-S        11.11.11.11 [1/0] via 10.1.0.5
-                     [1/0] via 10.1.0.1
-B     181.0.0.0/8 [20/0] via 191.1.0.2, 00:09:16
-B     182.0.0.0/8 [20/0] via 191.1.0.2, 00:09:16
-B     183.0.0.0/8 [20/0] via 191.1.0.2, 00:09:16
-B     184.0.0.0/8 [20/0] via 191.1.0.2, 00:09:16
-B     185.0.0.0/8 [20/0] via 191.1.0.2, 00:09:16
-B        200.18.245.64 [20/0] via 11.11.11.11, 00:07:30
-```
+<img width="891" height="411" alt="image" src="https://github.com/user-attachments/assets/84a50f51-9b71-45e9-80c5-6f72a22cd331" />
 
 Rotas BGP (`B`) corretamente instaladas. As estáticas multipath para `11.11.11.11` sustentam a sessão eBGP multihop.
 
@@ -374,34 +267,14 @@ Rotas BGP (`B`) corretamente instaladas. As estáticas multipath para `11.11.11.
 
 #### `show ip bgp summary` em ISP2
 
-```
-BGP router identifier 2.2.2.2, local AS number 200
-Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-10.2.0.1        4         1000      15      17        8    0    0 00:08:08        7
-191.2.0.2       4          300      16      14        8    0    0 00:09:46        7
-```
+<img width="881" height="316" alt="image" src="https://github.com/user-attachments/assets/49d8e0ac-c092-4db4-8eac-636f42c604f8" />
 
 Duas sessões eBGP UP. Recebe os 5 prefixos externos via ISP3 + a loopback do ISP1 + o `/27` da empresa.
 
 #### `show ip bgp` em ISP2
 
-```
-     Network          Next Hop            Metric LocPrf Weight Path
- *   10.10.10.10/32   10.2.0.1                               0 1000 100 i
- *>                   191.2.0.2                              0 300 100 i
- *   181.0.0.0/8      10.2.0.1                               0 1000 100 300 i
- *>                   191.2.0.2                0             0 300 i
- *   182.0.0.0/8      10.2.0.1                               0 1000 100 300 i
- *>                   191.2.0.2                0             0 300 i
- *   183.0.0.0/8      10.2.0.1                               0 1000 100 300 i
- *>                   191.2.0.2                0             0 300 i
- *   184.0.0.0/8      10.2.0.1                               0 1000 100 300 i
- *>                   191.2.0.2                0             0 300 i
- *   185.0.0.0/8      10.2.0.1                               0 1000 100 300 i
- *>                   191.2.0.2                0             0 300 i
- *   200.18.245.64/27 191.2.0.2                              0 300 100 1000 i
- *>                   10.2.0.1                 0             0 1000 i
-```
+<img width="880" height="469" alt="image" src="https://github.com/user-attachments/assets/85d17a76-485e-4eee-a744-833cfbb4a99f" />
+
 
 Vê os prefixos externos por **dois caminhos** (direto via ISP3 ou indireto via R1→ISP1→ISP3) — o caminho direto vence por AS-PATH menor. Para o `/27` da empresa, o caminho direto (`10.2.0.1`) vence.
 
@@ -411,74 +284,50 @@ Vê os prefixos externos por **dois caminhos** (direto via ISP3 ou indireto via 
 
 #### `show ip bgp summary` em ISP3
 
-```
-BGP router identifier 3.3.3.3, local AS number 300
-Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-191.1.0.1       4          100      15      16        8    0    0 00:10:24        2
-191.2.0.1       4          200      14      16        8    0    0 00:09:45        1
-```
+<img width="879" height="311" alt="image" src="https://github.com/user-attachments/assets/f65fa0bb-219b-4064-bd17-418008e4e5b2" />
+
 
 Recebe **2** prefixos via ISP1 (`10.10.10.10/32` + `200.18.245.64/27`) e **1** via ISP2 (`200.18.245.64/27`).
 
 #### `show ip bgp` em ISP3
 
-```
-     Network          Next Hop            Metric LocPrf Weight Path
- *>  10.10.10.10/32   191.1.0.1                0             0 100 i
- *>  181.0.0.0/8      0.0.0.0                  0         32768 i
- *>  182.0.0.0/8      0.0.0.0                  0         32768 i
- *>  183.0.0.0/8      0.0.0.0                  0         32768 i
- *>  184.0.0.0/8      0.0.0.0                  0         32768 i
- *>  185.0.0.0/8      0.0.0.0                  0         32768 i
- *   200.18.245.64/27 191.2.0.1                              0 200 1000 i
- *>                   191.1.0.1                              0 100 1000 i
-```
+<img width="808" height="347" alt="image" src="https://github.com/user-attachments/assets/9046324f-af44-4094-b093-fbc8998e5a8f" />
+
 
 Origina os 5 prefixos `/8`, recebe a loopback do ISP1 e o `/27` da empresa **por ambos os caminhos** (via ISP1 e via ISP2).
 
 #### `show ip bgp 200.18.245.64 255.255.255.224` em ISP3
 
-```
-BGP routing table entry for 200.18.245.64/27, version 8
-Paths: (2 available, best #2, table default)
-  Refresh Epoch 1
-  200 1000
-    191.2.0.1 from 191.2.0.1 (2.2.2.2)
-      Origin IGP, localpref 100, valid, external
-  Refresh Epoch 1
-  100 1000
-    191.1.0.1 from 191.1.0.1 (1.1.1.1)
-      Origin IGP, localpref 100, valid, external, best
-```
+<img width="883" height="305" alt="image" src="https://github.com/user-attachments/assets/433f996a-4f87-4183-9270-41111819492a" />
+<img width="883" height="305" alt="image" src="https://github.com/user-attachments/assets/c7fbadec-9818-4d25-8ab9-ea4bf6694964" />
 
 Comprova o anúncio **ponta-a-ponta** do bloco público: o `200.18.245.64/27` chega ao backbone (AS 300) pelos dois caminhos. AS-PATHs têm o mesmo tamanho (`100 1000` vs `200 1000`), e o desempate fica no **router-id menor** (`1.1.1.1` vence `2.2.2.2`), por isso o ISP3 elege a path via ISP1 como **best**.
 
----
-
-## Validação da política weight
-
-Resumo do que cada verificação confirma:
-
-| Critério                                | Como verificar               | Resultado                                                       |
-|-----------------------------------------|------------------------------|-----------------------------------------------------------------|
-| Sessões BGP estabelecidas               | `show ip bgp summary` no R1  | Ambas UP por >7 min, 6 PfxRcd cada                              |
-| Prefixo da empresa anunciado            | `show ip bgp` no ISP3        | `200.18.245.64/27` visto via duas paths (ISP1 best)             |
-| ISP1 = caminho preferencial             | `show ip bgp` no R1          | Todos os `181-185.0.0.0/8` com `*>` no next-hop `10.10.10.10`   |
-| Default route presente                  | `show ip route` no R1        | `S* 0.0.0.0/0 via 10.10.10.10`                                  |
-| Default propagada via OSPF              | `show ip ospf database`      | LSA Type-5 com Link ID `0.0.0.0`, R1 = ASBR                     |
-| OSPF interno sem poluição de externos   | `show ip ospf database`      | Apenas a Type-5 da default; nenhum dos /8 redistribuído         |
-| Conectividade adjacente (loopback ISP1) | `ping 10.10.10.10`           | 100% (5/5)                                                      |
-
----
-
 ## Teste de falha (failover)
+### Falha de 1 enlace (shutdown e0/1)
 
-Procedimento sugerido (não foi aplicado nesta execução para preservar o cenário em operação):
+<img width="872" height="435" alt="image" src="https://github.com/user-attachments/assets/3d32f08c-659f-4357-acee-2654e0635a01" />
+<img width="871" height="62" alt="image" src="https://github.com/user-attachments/assets/182d12bd-afd3-45b6-86c6-e200ef9561b0" />
 
-1. **Estado base:** `show ip route 0.0.0.0` no R1 → next-hop `10.10.10.10`; rotas BGP `B 181..185.0.0.0/8 via 10.10.10.10`.
-2. **Derruba 1 enlace do ISP1:** `interface Ethernet0/1; shutdown` no R1. A sessão eBGP com `10.10.10.10` **continua UP** porque a recursão ainda alcança a loopback pelo segundo enlace (`10.1.0.6`). É exatamente para isso que serve a sessão por loopback.
-3. **Derruba o 2º enlace do ISP1:** `interface Ethernet0/2; shutdown`. A rota estática para `10.10.10.10/32` morre, a sessão eBGP cai e o BGP escolhe o **ISP2** como best-path em todos os 5 prefixos externos. A default `S* 0.0.0.0/0 via 10.10.10.10` também some, e o OSPF deixa de anunciar a LSA Type-5 — momento em que faz sentido **adicionar uma default secundária** (`ip route 0.0.0.0 0.0.0.0 10.2.0.2 250`) para garantir saída pelo ISP2 mesmo sem a sessão com ISP1.
-4. **Restaura:** `no shutdown` nas duas interfaces; após o BGP reconvergir (~poucos segundos), o ISP1 volta a ser preferido por causa do weight.
+
+
+A sessão eBGP multihop sobreviveu: o loopback 10.10.10.10 continua alcançável pelo segundo enlace (10.1.0.6), nada migrou. Os 5 prefixos /8 ainda via ISP1, default igual. Esse é exatamente o ganho do desenho com sessão por loopback + 2 enlaces físicos.
+### Falha total do ISP1 (shutdown e0/2 + clear ip bgp 10.10.10.10)
+
+<img width="877" height="722" alt="image" src="https://github.com/user-attachments/assets/1ae167d5-c9f3-43ec-a5a2-a5927540dc27" />
+<img width="876" height="627" alt="image" src="https://github.com/user-attachments/assets/d0014f39-c489-42cc-b27f-2edec676d325" />
+<img width="880" height="374" alt="image" src="https://github.com/user-attachments/assets/99a88f28-6ada-4c94-8aa5-d4c53b59ad66" />
+
+Failover BGP comprovado: sessão com 10.10.10.10 em estado Idle, todos os 5 prefixos /8 migraram para best path via 10.2.0.2 (ISP2), e a tabela de rotas já mostra B ... via 10.2.0.2. O ISP2 assumiu o tráfego de saída em poucos segundos.
+Detalhe técnico que vale documentar: a rota estática S 10.10.10.10/32 via 10.1.0.6 e a default S* 0.0.0.0/0 via 10.10.10.10 continuaram listadas (o IOS demora a invalidar estáticas com next-hop IP quando a interface vai admin-down). Isso confirma na prática a recomendação do relatório: em produção, adicionar uma default backup com distância maior — ip route 0.0.0.0 0.0.0.0 10.2.0.2 250 — para que a rota default migre junto com o BGP quando o ISP1 cai.
+### Recuperação (no shutdown em ambas)
+
+<img width="3809" height="1911" alt="image" src="https://github.com/user-attachments/assets/6ccc3a2d-df4f-4008-89d8-93330c9ac368" />
+<img width="3809" height="1911" alt="image" src="https://github.com/user-attachments/assets/7244b2c4-12ac-4364-a270-0ed10b554320" />
+<img width="875" height="305" alt="image" src="https://github.com/user-attachments/assets/7e9bec4c-7584-4b44-b707-9ef757b0433b" />
+<img width="875" height="305" alt="image" src="https://github.com/user-attachments/assets/3ecfae89-b271-4ae1-b81c-01285caff645" />
+
+Reconvergência: em ~30 s a sessão BGP reabriu (Up/Down 00:00:34), o multipath estático para 10.10.10.10/32 voltou com os dois next-hops, e o weight 200 puxou o best path de volta para ISP1 (visível agora explicitamente na coluna Weight do show ip bgp). Estado idêntico à Fase A, com write memory salvo.
 
 **O que observar:**
 
@@ -490,30 +339,9 @@ Procedimento sugerido (não foi aplicado nesta execução para preservar o cená
 
 ## Observação sobre testes ICMP fim-a-fim
 
-Durante a validação, foi observado o mesmo comportamento já documentado no Lab 07: ping de `R1` para loopbacks remotas do `ISP3` (ex.: `181.0.0.1`) retorna **0% success**, embora o `traceroute` mostre que o pacote chega corretamente no **ISP1** (hop 1: `10.1.0.2` / `10.1.0.6`) e ali se perde.
-
-```
-R1# traceroute 181.0.0.1 source 11.11.11.11 numeric
-Tracing the route to 181.0.0.1
-  1 10.1.0.2 0 msec
-    10.1.0.6 1 msec
-    10.1.0.2 0 msec
-  2  *  *  *
-  3  *  *  *
-```
-
-A causa é **rota de retorno**: o `R1` envia com source `11.11.11.11` (sua loopback), mas `11.11.11.11/32` **nunca é anunciada** no BGP externo (apenas o `/27` é). O ISP3 não tem rota de volta. Comportamento esperado dado o desenho do laboratório.
-
 Ping para o **vizinho BGP** (`10.10.10.10`), que **é** anunciado e tem rota de retorno via estáticas multipath no ISP1, funciona com 100% success:
 
-```
-R1# ping 10.10.10.10 source 11.11.11.11 repeat 5
-Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 10.10.10.10, timeout is 2 seconds:
-Packet sent with a source address of 11.11.11.11
-!!!!!
-Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-```
+<img width="692" height="122" alt="image" src="https://github.com/user-attachments/assets/cde26aaa-ae94-415a-9520-f9169fc55a14" />
 
 ---
 
@@ -531,7 +359,7 @@ Ao final do laboratório o cenário apresenta:
 
 ---
 
-## Respostas às questões da Seção 14 da proposta
+## Respostas fas questões
 
 1. **Papel do OSPF:** representar o domínio interno do AS 1000 (LAN + loopback), trocando prefixos internos e servindo como veículo para a rota default chegar nos elementos internos.
 2. **Papel do BGP:** anunciar/receber prefixos entre sistemas autônomos (AS 1000 ↔ 100 ↔ 200 ↔ 300) e ser o ponto onde a política de saída é aplicada.
