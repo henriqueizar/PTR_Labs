@@ -101,7 +101,7 @@ Loopbacks de identificação dos LSRs no OSPF/LDP:
 | ISP2 | Loopback1 | 2.2.2.2/32 |
 | ISP3 | Loopback10 | 3.3.3.3/32 |
 
-> **Desvio do enunciado:** o lab pedia `Loopback 1` no ISP1 com `1.1.1.1/32`, mas a `Loopback1` já hospeda `10.10.10.10/32` desde o Lab 08 — endereço que sustenta a sessão eBGP multihop com R1. Sobrescrever derrubaria o Lab 08. Usei **Loopback10** no ISP1 para preservar o cenário anterior.
+> **Desvio do enunciado:** Foi utilizado o  **Loopback10** ao invés do Loopback1 no ISP1 para preservar o cenário do Lab08(pretendo consertar uma parte do Lab08).
 
 ```bash
 # ISP1
@@ -148,7 +148,7 @@ ISP3(config-router)# network 3.3.3.3 0.0.0.0 area 0
 
 ## Etapa 3 — MPLS + LDP nos enlaces do backbone
 
-Apenas nos enlaces ISP1↔ISP3 e ISP2↔ISP3. O enunciado usa `fastethernet 0/0`, mas no PNetLab as interfaces são **Ethernet**, com a numeração de cada par:
+Apenas nos enlaces ISP1-ISP3 e ISP2-ISP3. O enunciado usa `fastethernet 0/0`, mas no PNetLab as interfaces são **Ethernet**, com a numeração de cada par:
 
 ```bash
 # ISP1 (enlace com ISP3)
@@ -180,37 +180,22 @@ ISP3(config-if)# mpls ip
 
 ### `show ip ospf neighbor` em ISP3
 
-```
-Neighbor ID     Pri   State           Dead Time   Address         Interface
-2.2.2.2           1   FULL/BDR        00:00:36    191.2.0.1       Ethernet0/1
-1.1.1.1           1   FULL/BDR        00:00:37    191.1.0.1       Ethernet0/0
-```
+<img width="788" height="117" alt="image" src="https://github.com/user-attachments/assets/8da95fcc-603c-4af5-8742-dc06a6dd35e9" />
 
 Dois vizinhos em **FULL**. ISP3 é DR nas duas interfaces; ISP1 e ISP2 são BDR. Convergência completa.
 
 ### `show ip route` em ISP3 (recorte das rotas OSPF)
 
-```
-O   1.1.1.1 [110/11] via 191.1.0.1, Ethernet0/0
-O   2.2.2.2 [110/11] via 191.2.0.1, Ethernet0/1
-C   3.3.3.3 is directly connected, Loopback10
-```
+<img width="646" height="642" alt="image" src="https://github.com/user-attachments/assets/9edb1bac-5a43-4223-87ac-ebf144b7e905" />
+
 
 ISP3 aprendeu via OSPF as loopbacks dos PEs — pré-requisito para o LDP distribuir labels.
 
 ### `show ip protocols` em ISP3 (seção OSPF)
 
-```
-Routing Protocol is "ospf 100"
-  Router ID 3.3.3.3
-  Routing for Networks:
-    3.3.3.3 0.0.0.0 area 0
-    191.1.0.0 0.0.0.3 area 0
-    191.2.0.0 0.0.0.3 area 0
-  Routing Information Sources:
-    2.2.2.2  Distance 110
-    1.1.1.1  Distance 110
-```
+<img width="663" height="680" alt="image" src="https://github.com/user-attachments/assets/bb92f79b-8af3-4f3c-825f-5cd2248b86e1" />
+<img width="650" height="444" alt="image" src="https://github.com/user-attachments/assets/43474111-9228-4dfb-9fec-0923094bded4" />
+
 
 Router-id, networks e LSAs corretos. O BGP 300 continua rodando em paralelo (sem conflito).
 
@@ -220,40 +205,21 @@ Router-id, networks e LSAs corretos. O BGP 300 continua rodando em paralelo (sem
 
 ### `show mpls interfaces` em ISP3
 
-```
-Interface       IP           Tunnel  BGP Static Operational
-Ethernet0/0     Yes (ldp)    No      No  No     Yes
-Ethernet0/1     Yes (ldp)    No      No  No     Yes
-```
+<img width="681" height="100" alt="image" src="https://github.com/user-attachments/assets/be4975dd-5199-4bff-9337-6581795bced8" />
+
 
 Ambas as interfaces do núcleo operacionais com MPLS via LDP.
 
 ### `show mpls ldp neighbor` em ISP3
 
-```
-Peer LDP Ident: 1.1.1.1:0; Local LDP Ident 3.3.3.3:0
-    TCP connection: 1.1.1.1.646 - 3.3.3.3.61037
-    State: Oper; Msgs sent/rcvd: 38/36; Downstream
-    Up time: 00:22:07
-    LDP discovery sources: Ethernet0/0, Src IP addr: 191.1.0.1
-
-Peer LDP Ident: 2.2.2.2:0; Local LDP Ident 3.3.3.3:0
-    TCP connection: 2.2.2.2.646 - 3.3.3.3.29787
-    State: Oper; Msgs sent/rcvd: 38/34; Downstream
-    Up time: 00:21:59
-    LDP discovery sources: Ethernet0/1, Src IP addr: 191.2.0.1
-```
+<img width="697" height="357" alt="image" src="https://github.com/user-attachments/assets/c5f149eb-392a-4fdb-b02d-b17bb14c3a75" />
 
 Duas sessões LDP em estado **Oper**, TCP/646 estabelecido, LDP-IDs casando com as loopbacks do backbone.
 
 ### `show mpls forwarding-table` em ISP3
 
-```
-Local  Outgoing    Prefix         Bytes Label  Outgoing    Next Hop
-Label  Label       or Tunnel Id   Switched     interface
-16     Pop Label   1.1.1.1/32     0            Et0/0       191.1.0.1
-17     Pop Label   2.2.2.2/32     0            Et0/1       191.2.0.1
-```
+<img width="747" height="104" alt="image" src="https://github.com/user-attachments/assets/8bb11e42-718e-4b01-930d-fa2d95f5d957" />
+
 
 LFIB do ISP3 com dois detalhes-chave:
 
@@ -265,9 +231,9 @@ LFIB do ISP3 com dois detalhes-chave:
 ## Item 14 — Teste de observação
 
 1. **Onde termina o cliente:** no R1.
-2. **Onde começa a nuvem do provedor:** nos enlaces R1↔ISP1 e R1↔ISP2 (R1 só vê IP/BGP; a partir do ISP1/ISP2 começa o MPLS).
+2. **Onde começa a nuvem do provedor:** nos enlaces R1-ISP1 e R-ISP2 (R1 só ve IP/BGP; a partir do ISP1/ISP2 começa o MPLS).
 3. **CE, PE, P:** R1 = CE; ISP1 e ISP2 = PE; ISP3 = P.
-4. **Enlaces com MPLS ativado:** ISP1↔ISP3 (`191.1.0.0/30`) e ISP2↔ISP3 (`191.2.0.0/30`) — apenas o núcleo.
+4. **Enlaces com MPLS ativado:** ISP1-ISP3 (`191.1.0.0/30`) e ISP2-ISP3 (`191.2.0.0/30`) — apenas o núcleo.
 5. **Prefixos rotulados:** `1.1.1.1/32` (label 16) e `2.2.2.2/32` (label 17). Prefixos BGP não recebem rótulo.
 
 ---
