@@ -37,7 +37,8 @@ flowchart LR
 
 ### Print da topologia no PNetLab
 
-<!-- Insira aqui o print da topologia -->
+<img width="729" height="393" alt="image" src="https://github.com/user-attachments/assets/a421185b-abf1-49cd-81cf-ace0814a169e" />
+
 
 | Dispositivo | Interface | Endereço IP | Gateway |
 |---|---|---|---|
@@ -46,9 +47,9 @@ flowchart LR
 | Linux Firewall | ens4 (e1) | 192.168.20.1/24 | - |
 | Linux Cliente 2 | eth0 | 192.168.20.10/24 | 192.168.20.1 |
 
-> **Desvio do enunciado:** o enunciado nomeia as interfaces do firewall como `eth0`/`eth1`, mas o Ubuntu 24.04 usa *predictable network interface names* — as interfaces aparecem como **`ens3`** (= `e0`) e **`ens4`** (= `e1`). A configuração foi feita sobre esses nomes reais.
+> **Desvio do enunciado:** o enunciado nomeia as interfaces do firewall como `eth0`/`eth1`, mas no Ubuntu 24.04 as interfaces aparecem como **`ens3`** (= `e0`) e **`ens4`** (= `e1`). A configuração foi feita sobre esses nomes reais.
 >
-> **Atenção operacional:** o nó Firewall deve ser criado **já com `Ethernet: 2`** antes de desenhar os cabos. Alterar de 1 para 2 com os links já traçados deixa a fiação interna inconsistente (o segundo enlace não amarra na interface correta), gerando os dois clientes no mesmo segmento L2.
+> **Atenção (Erro cometido e posteriormente contornado):** o nó Firewall deve ser criado **já com `Ethernet: 2`** antes de desenhar os cabos. Alterar de 1 para 2 com os links já traçados deixa a fiação interna inconsistente, gerando os dois clientes no mesmo segmento L2. Esse erro foi cometido e fez com que a duração para finalizar esse Laboratório se extendesse a mais que 5 horas.
 
 ---
 
@@ -112,7 +113,12 @@ Com `=1`, o `tcpdump -i any -n icmp` no firewall mostra apenas os **echo request
 
 ### Print do tcpdump (com `=1`, só requests)
 
-<!-- Insira aqui o print do tcpdump sem replies -->
+<img width="692" height="153" alt="image" src="https://github.com/user-attachments/assets/d31f44d7-cea0-42c0-8ddf-6f3f127e145b" />
+
+### Print do tcpdump (com `=0`, requests e replies)
+
+
+<img width="677" height="229" alt="image" src="https://github.com/user-attachments/assets/b43236ce-82a4-451f-89fb-e58b8013fc37" />
 
 ---
 
@@ -129,7 +135,9 @@ ping -c 3 192.168.10.10        # ok
 
 ### Print do ping ponta a ponta
 
-<!-- Insira aqui o print do ping funcionando sem firewall -->
+<img width="532" height="183" alt="image" src="https://github.com/user-attachments/assets/ec30abfb-56e1-4123-a5c9-0818b5f92d87" />
+<img width="494" height="184" alt="image" src="https://github.com/user-attachments/assets/18e6da54-31c0-4917-8190-3d8f078e89a4" />
+
 
 ---
 
@@ -176,7 +184,8 @@ Os contadores `pkts` comprovam quantitativamente o casamento de cada regra: ICMP
 
 ### Print do `iptables -L -n -v`
 
-<!-- Insira aqui o print das regras com contadores -->
+<img width="842" height="299" alt="image" src="https://github.com/user-attachments/assets/9b6a1cef-a754-4517-9135-68d61d043f8d" />
+
 
 ---
 
@@ -191,7 +200,9 @@ ping -c 3 192.168.20.10        # responde
 ping -c 3 192.168.10.10        # responde
 ```
 
-<!-- Insira aqui o print do ping permitido -->
+<img width="464" height="181" alt="image" src="https://github.com/user-attachments/assets/26523f73-acb2-4836-a20e-89f8e8183912" />
+<img width="465" height="182" alt="image" src="https://github.com/user-attachments/assets/f2bcae95-98e3-48d6-8eb7-b09e7d30bc4c" />
+
 
 ### Teste 2 — HTTP / porta 80 (deve funcionar)
 
@@ -206,7 +217,9 @@ nc 192.168.20.10 80
 
 A conexão é estabelecida e o texto digitado no Cliente 1 aparece no Cliente 2 — a porta 80 atravessa o firewall.
 
-<!-- Insira aqui o print do HTTP permitido -->
+<img width="478" height="133" alt="image" src="https://github.com/user-attachments/assets/4682f290-3b0b-499a-9386-d1c6f519370f" />
+<img width="461" height="85" alt="image" src="https://github.com/user-attachments/assets/dc45bd9c-ba82-4a24-ad55-e6626f7fc05b" />
+
 
 ### Teste 3 — Telnet / porta 23 (deve falhar)
 
@@ -220,7 +233,8 @@ O `Connection timed out` (e não `Connection refused`) é a assinatura do `DROP`
 
 <!-- Insira aqui o print do Telnet bloqueado (timed out) -->
 
----
+<img width="461" height="51" alt="image" src="https://github.com/user-attachments/assets/8430b6db-9359-4ba7-b475-b9879d4df5ea" />
+
 
 ## Questões para análise
 
