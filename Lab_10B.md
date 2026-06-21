@@ -34,7 +34,8 @@ flowchart LR
 
 ### Print da topologia no PNetLab
 
-<!-- Insira aqui o print da topologia -->
+<img width="465" height="240" alt="image" src="https://github.com/user-attachments/assets/71bf095c-8d04-451b-a33d-e2f36a4f73e2" />
+
 
 | Dispositivo | Interface | Endereço IP | Gateway |
 |---|---|---|---|
@@ -58,9 +59,12 @@ cat /proc/sys/net/ipv4/ip_forward      # -> 1
 
 ### Prints da configuração IP dos três hosts
 
-<!-- Insira aqui o `ip addr` do Cliente 1 -->
-<!-- Insira aqui o `ip addr` do Firewall -->
-<!-- Insira aqui o `ip addr` do Cliente 2 -->
+<img width="604" height="148" alt="image" src="https://github.com/user-attachments/assets/ac201b4e-02ca-4e2f-9109-f49b85973537" />
+
+<img width="792" height="280" alt="image" src="https://github.com/user-attachments/assets/97842b31-74dc-4937-9918-f3b90366427f" />
+
+<img width="613" height="144" alt="image" src="https://github.com/user-attachments/assets/4cf822d7-11fa-448b-a0b6-7c4ec955b77e" />
+
 
 ---
 
@@ -98,18 +102,17 @@ sudo iptables -A FORWARD -s 192.168.10.10 -d 192.168.20.10 -p tcp --dport 80 -m 
 São **3 regras** (contra 5 no Lab 10): uma de retorno genérica e duas de início. Não há nenhuma regra de volta explícita — o `conntrack` cuida disso.
 
 ---
+### Print das regras configuradas (counters zerados)
+
+<img width="930" height="188" alt="image" src="https://github.com/user-attachments/assets/8a909a56-67b8-4a41-94c0-07da00cf6030" />
+
 
 ## Verificação das regras
 
 ### `sudo iptables -L -n -v` (após os testes)
 
-```
-Chain FORWARD (policy DROP 24 packets, 1719 bytes)
- pkts bytes target  prot opt in out source         destination
-   53  4153 ACCEPT  all  --  *  *  0.0.0.0/0       0.0.0.0/0       ctstate RELATED,ESTABLISHED
-    1    84 ACCEPT  icmp --  *  *  192.168.10.10   192.168.20.10   ctstate NEW
-    1    60 ACCEPT  tcp  --  *  *  192.168.10.10   192.168.20.10   tcp dpt:80 ctstate NEW
-```
+<img width="959" height="250" alt="image" src="https://github.com/user-attachments/assets/06490596-e75b-4a4f-a300-615088f1a1f3" />
+
 
 ```
 $ sudo iptables -S
@@ -123,9 +126,8 @@ $ sudo iptables -S
 
 ### Print do `iptables -L -n -v`
 
-<!-- Insira aqui o print das regras com contadores -->
+<img width="930" height="188" alt="image" src="https://github.com/user-attachments/assets/5c25f9cd-be74-484c-9caa-dc164ea802d4" />
 
-> O utilitário `conntrack` não estava instalado no firewall (`which conntrack` sem retorno), então a inspeção das conexões foi feita pelos contadores das regras, como o próprio roteiro permite.
 
 ---
 
@@ -138,7 +140,8 @@ $ sudo iptables -S
 ping -c 5 192.168.20.10        # responde (regra NEW + retorno ESTABLISHED)
 ```
 
-<!-- Insira aqui o print do ping do Cliente 1 funcionando -->
+<img width="429" height="131" alt="image" src="https://github.com/user-attachments/assets/30656d13-ab82-4da0-8fe4-21b77df9feb0" />
+
 
 ### Teste 2 — ICMP iniciado pelo Cliente 2 (deve FALHAR)
 
@@ -149,7 +152,8 @@ ping 192.168.10.10             # 100% packet loss
 
 O Cliente 2 não tem regra `NEW` e não há conexão estabelecida partindo dele, então a política `DROP` o barra. **Este é o teste que evidencia o stateful** — diferente do Lab 10, onde o ICMP era liberado explicitamente nos dois sentidos.
 
-<!-- Insira aqui o print do ping do Cliente 2 falhando (100% loss) -->
+<img width="457" height="104" alt="image" src="https://github.com/user-attachments/assets/377e99a8-a91b-4dad-9d50-8c7892f29701" />
+
 
 ### Teste 3 — HTTP iniciado pelo Cliente 1 (deve funcionar)
 
@@ -164,7 +168,14 @@ nc 192.168.20.10 80
 
 A conexão é estabelecida e os dados trafegam nos dois sentidos — **sem nenhuma regra de retorno explícita**, apenas pela regra `ESTABLISHED,RELATED`.
 
-<!-- Insira aqui o print do HTTP funcionando -->
+Client 2 ouvindo(e posteriormente recebendo as mensagens do client 1:
+
+<img width="463" height="69" alt="image" src="https://github.com/user-attachments/assets/f65e12e2-7a02-48ea-a02a-f962e97318a6" />
+
+Client 1(conectado; envio das mensagens HTTP):
+
+<img width="364" height="65" alt="image" src="https://github.com/user-attachments/assets/38bfd09b-afa5-47f0-8130-48f627b1f463" />
+
 
 ### Teste 4 — Nova conexão iniciada pelo Cliente 2 (deve falhar)
 
@@ -173,7 +184,8 @@ A conexão é estabelecida e os dados trafegam nos dois sentidos — **sem nenhu
 nc -vz -w 3 192.168.10.10 80   # Connection timed out
 ```
 
-<!-- Insira aqui o print da conexão do Cliente 2 bloqueada -->
+<img width="445" height="44" alt="image" src="https://github.com/user-attachments/assets/1f56bf1f-295d-4418-9632-4f2339c542b7" />
+
 
 ### Teste 5 — Telnet / porta 23 (deve falhar)
 
@@ -184,7 +196,8 @@ nc -vz -w 3 192.168.20.10 23   # Connection timed out
 
 Não há regra `NEW` para a porta 23; a política `DROP` descarta em silêncio (timeout, não "refused").
 
-<!-- Insira aqui o print do Telnet bloqueado -->
+<img width="449" height="53" alt="image" src="https://github.com/user-attachments/assets/ef84e191-087d-42e4-b995-bd9fad61e72d" />
+
 
 ---
 
