@@ -41,7 +41,8 @@ flowchart LR
 
 ### Print da topologia no PNetLab
 
-<!-- Insira aqui o print da topologia -->
+<img width="522" height="388" alt="image" src="https://github.com/user-attachments/assets/3d182eef-fd74-41c1-9667-204c964ef12c" />
+
 
 | Dispositivo | Interface | Endereço IP | Gateway |
 |---|---|---|---|
@@ -54,9 +55,14 @@ flowchart LR
 
 ### Prints da configuração IP dos três hosts
 
-<!-- Insira aqui o `ip addr` do Cliente -->
-<!-- Insira aqui o `ip addr` do WAF (ens3 e ens4) -->
-<!-- Insira aqui o `ip addr` do Servidor Web -->
+<img width="359" height="200" alt="image" src="https://github.com/user-attachments/assets/cde7c17d-5040-4520-b6a4-629a3aac0f94" />
+
+<img width="828" height="230" alt="image" src="https://github.com/user-attachments/assets/d7c5bee9-d791-43c6-b2ae-7218f7600bb1" />
+
+
+<img width="783" height="218" alt="image" src="https://github.com/user-attachments/assets/15805e10-ba12-41cc-8e66-268b6d868d3b" />
+
+
 
 ---
 
@@ -145,7 +151,8 @@ grep SecRuleEngine /etc/nginx/modsecurity.conf      # -> SecRuleEngine On
 
 ### Print do `SecRuleEngine On`
 
-<!-- Insira aqui o print do grep SecRuleEngine mostrando On -->
+<img width="670" height="64" alt="image" src="https://github.com/user-attachments/assets/c9b34746-b40a-4c46-8e59-f45448b2e6bb" />
+
 
 ---
 
@@ -206,7 +213,8 @@ As **921 regras do OWASP CRS** carregadas confirmam que o WAF está ativo.
 
 ### Print do `nginx -t`
 
-<!-- Insira aqui o print do nginx -t com as 921 regras carregadas -->
+<img width="889" height="79" alt="image" src="https://github.com/user-attachments/assets/0b499adb-1845-4736-8e1a-4199467fc731" />
+
 
 ---
 
@@ -224,21 +232,22 @@ Resultado: o cliente recebe `<h1>Servidor Web Interno OK</h1>` — a página do 
 
 ### Print do acesso do cliente via WAF
 
-<!-- Insira aqui o print do wget no cliente retornando a página -->
+<img width="605" height="91" alt="image" src="https://github.com/user-attachments/assets/b2c23851-0121-4aed-a23d-c644f597077e" />
+
 
 ### Teste 2 — Log do backend (origem = WAF)
 
 No terminal do **Servidor Web** aparece a requisição encaminhada pelo proxy:
 
-```
-192.168.20.1 - - [22/Jun/2026 ...] "GET / HTTP/1.1" 200 -
-```
+<img width="517" height="60" alt="image" src="https://github.com/user-attachments/assets/cb2cbb48-6ad9-4b10-8c19-479ce5749882" />
+
 
 A origem é **192.168.20.1** (interface `ens4` do WAF), não o IP do cliente — prova de que quem conversou com o backend foi o WAF, e não o cliente diretamente. É a característica do proxy reverso.
 
 ### Print do log do backend
 
-<!-- Insira aqui o print do log do python http.server mostrando a origem 192.168.20.1 -->
+<img width="517" height="60" alt="image" src="https://github.com/user-attachments/assets/744f71ef-f1dc-4d3b-9afd-65209fa99045" />
+
 
 ### Teste 3 (bônus) — Requisição maliciosa (deve ser BLOQUEADA)
 
@@ -267,8 +276,10 @@ O CRS opera em modo **anomaly scoring**: cada regra que casa soma pontos a um sc
 
 ### Prints do bloqueio (403) e do log da regra
 
-<!-- Insira aqui o print do 403 Forbidden -->
-<!-- Insira aqui o print do error.log com o id 949110 e o anomaly score -->
+<img width="613" height="140" alt="image" src="https://github.com/user-attachments/assets/3cc66c93-0587-43ab-bb00-e6dbfc7983d8" />
+
+<img width="1019" height="128" alt="image" src="https://github.com/user-attachments/assets/ffa5b3b7-7434-4bee-a040-b472a897492b" />
+
 
 ---
 
