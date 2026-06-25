@@ -5,6 +5,8 @@
 **Monitores:** Victor Lima dos Santos / Beatriz Silva Nascimento
 **Tema:** Proteção de aplicações web com Web Application Firewall
 
+**Aluno:** Henrique Izar -222026985
+
 **Observação:** Continuação dos Laboratórios 10 e 10B. A máquina intermediária deixa de ser um firewall de rede e passa a atuar como **firewall de aplicação (WAF)** em modo de **proxy reverso**.
 
 ---
