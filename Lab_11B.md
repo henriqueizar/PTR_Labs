@@ -5,6 +5,8 @@
 **Monitores:** Victor Lima dos Santos / Beatriz Silva Nascimento
 **Tema:** Validação prática de proteção web com WAF
 
+**Aluno:** Henrique Izar -222026985
+
 **Observação:** Continuação direta do **Laboratório 11A**, reutilizando o mesmo ambiente (Nginx + ModSecurity + OWASP CRS já configurados).
 
 ---
@@ -41,7 +43,8 @@ flowchart LR
 
 ### Print da topologia no PNetLab
 
-<!-- Insira aqui o print da topologia -->
+<img width="499" height="366" alt="image" src="https://github.com/user-attachments/assets/aaf74ae1-a82a-4f3d-8f46-7894926e4760" />
+
 
 ---
 
@@ -88,7 +91,8 @@ curl -s -o /dev/null -w "%{http_code}\n" "http://127.0.0.1/?id=10"
 
 ### Print dos testes legítimos (200)
 
-<!-- Insira aqui o print dos testes legítimos retornando 200 -->
+<img width="745" height="82" alt="image" src="https://github.com/user-attachments/assets/b97e4322-2b5d-4942-9bfb-b2f54c88664b" />
+
 
 ---
 
@@ -109,9 +113,12 @@ curl -s -o /dev/null -w "LFI: %{http_code}\n" "http://127.0.0.1/?file=%2e%2e%2f%
 
 ### Prints dos testes maliciosos (403)
 
-<!-- Insira aqui o print do SQLi: 403 -->
-<!-- Insira aqui o print do XSS: 403 -->
-<!-- Insira aqui o print do LFI: 403 -->
+<img width="927" height="34" alt="image" src="https://github.com/user-attachments/assets/bae60cb2-324f-4dac-8002-0d49d0f0ad60" />
+
+<img width="969" height="64" alt="image" src="https://github.com/user-attachments/assets/dd4ceb12-39fc-4a51-a364-fa9230e4bc3d" />
+
+<img width="969" height="64" alt="image" src="https://github.com/user-attachments/assets/fe105c05-5088-40b7-8ef4-b64bcf994bcd" />
+
 
 ---
 
@@ -151,7 +158,8 @@ request: "GET /?file=%2e%2e%2f%2e%2e%2fetc%2fpasswd HTTP/1.1"
 
 ### Print do log do ModSecurity (error.log)
 
-<!-- Insira aqui o print do error.log com os eventos id 949110 -->
+<img width="1000" height="219" alt="image" src="https://github.com/user-attachments/assets/7ecb6163-0752-4313-9974-8c68961ac5f1" />
+
 
 ### Log de acesso do Nginx
 
@@ -161,7 +169,8 @@ sudo tail -n 5 /var/log/nginx/access.log
 
 Mostra as requisições recebidas (legítimas com 200, maliciosas com 403).
 
-<!-- Insira aqui o print do access.log -->
+<img width="950" height="80" alt="image" src="https://github.com/user-attachments/assets/5eb4db9b-53fc-4099-9da1-3a22685550a4" />
+
 
 ---
 
