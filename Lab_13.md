@@ -35,7 +35,8 @@ flowchart TB
 
 ### Print da topologia no PNetLab
 
-<!-- Insira aqui o print da topologia -->
+<img width="523" height="454" alt="image" src="https://github.com/user-attachments/assets/7e80100b-ceab-4e93-bbb2-fd4618125376" />
+
 
 | Dispositivo | Interface | Endereço IP | Observação |
 |---|---|---|---|
@@ -72,7 +73,8 @@ Resultado esperado: `ens3   UP   192.168.0.1/24`.
 
 ### Print do `ip -br addr` no servidor
 
-<!-- Insira aqui o print do ip -br addr do servidor -->
+<img width="764" height="82" alt="image" src="https://github.com/user-attachments/assets/a0ffc8e0-1e26-4c5f-aa0e-7c54e0bc8d83" />
+
 
 ### 4.2 Instalação do serviço
 
@@ -109,7 +111,8 @@ subnet 192.168.0.0 netmask 255.255.255.0 {
 
 ### Print do trecho do `dhcpd.conf`
 
-<!-- Insira aqui o print do dhcpd.conf (tail) -->
+<img width="530" height="191" alt="image" src="https://github.com/user-attachments/assets/128fc15d-cc5d-4aca-a4cc-72dbdb60d0ad" />
+
 
 ### 4.5 Validação e início do serviço
 
@@ -141,10 +144,14 @@ cat /etc/resolv.conf
 
 ### Prints do `ip -br addr` dos quatro clientes
 
-<!-- Insira aqui o print do ip -br addr do Cliente 1 -->
-<!-- Insira aqui o print do ip -br addr do Cliente 2 -->
-<!-- Insira aqui o print do ip -br addr do Cliente 3 -->
-<!-- Insira aqui o print do ip -br addr do Cliente 4 -->
+<img width="608" height="150" alt="image" src="https://github.com/user-attachments/assets/8866b167-0632-4b57-afb7-dfdd7f46eb5f" />
+
+<img width="609" height="152" alt="image" src="https://github.com/user-attachments/assets/ec979ff0-7543-44c7-a260-9497bd8ba875" />
+
+<img width="609" height="141" alt="image" src="https://github.com/user-attachments/assets/1359a316-99a4-41cf-a82d-ed8be6c1989b" />
+
+<img width="606" height="137" alt="image" src="https://github.com/user-attachments/assets/da099c0b-4fe6-4412-bb82-f2a8866c9192" />
+
 
 ---
 
@@ -181,7 +188,8 @@ lease 192.168.0.101 {
 
 ### Print do `dhcpd.leases`
 
-<!-- Insira aqui o print do dhcpd.leases -->
+<img width="372" height="673" alt="image" src="https://github.com/user-attachments/assets/291f1091-3395-4e5f-9570-e3c32e800eae" />
+
 
 ---
 
@@ -211,7 +219,8 @@ dhcpd: DHCPACK on 192.168.0.102 to 50:e8:38:08:8c:00 via ens3
 
 ### Print do log DORA
 
-<!-- Insira aqui o print do log com DHCPDISCOVER/OFFER/REQUEST/ACK -->
+<img width="1049" height="511" alt="image" src="https://github.com/user-attachments/assets/f47eda26-c5c7-480f-86ce-4566c9ea4af0" />
+
 
 > Opcionalmente, o mesmo processo pode ser capturado com `sudo tcpdump -i ens3 -n port 67 or port 68` enquanto um cliente renova o IP.
 
@@ -228,7 +237,8 @@ ping -c 3 192.168.0.101    # cliente -> outro cliente
 
 ### Print do teste de conectividade
 
-<!-- Insira aqui o print do ping funcionando -->
+<img width="439" height="159" alt="image" src="https://github.com/user-attachments/assets/23a9452d-2b4c-4774-84be-3f4baa7e5897" />
+
 
 ---
 
