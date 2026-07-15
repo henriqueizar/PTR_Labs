@@ -39,7 +39,8 @@ flowchart TB
 
 ### Print da topologia no PNetLab
 
-<!-- Insira aqui o print da topologia (com o rogue) -->
+<img width="537" height="460" alt="image" src="https://github.com/user-attachments/assets/34dc3c94-72d1-41a5-9186-0d8e1b77fa73" />
+
 
 | Dispositivo | IP | Função |
 |---|---|---|
@@ -93,7 +94,8 @@ sudo systemctl restart isc-dhcp-server
 
 ### Print do `dhcpd.conf` do rogue
 
-<!-- Insira aqui o print do dhcpd.conf do servidor rogue -->
+<img width="471" height="128" alt="image" src="https://github.com/user-attachments/assets/ec0d9943-d19a-4bd6-ac97-050055910044" />
+
 
 ---
 
@@ -123,7 +125,8 @@ Saída do `tcpdump` (real):
 
 ### Print do `tcpdump` (dois servidores)
 
-<!-- Insira aqui o print do tcpdump mostrando .1 e .254 respondendo -->
+<img width="957" height="237" alt="image" src="https://github.com/user-attachments/assets/47bd04cf-aab5-4310-9e35-cee5e71708cc" />
+
 
 ---
 
@@ -156,7 +159,8 @@ O cliente recebeu IP, **gateway e DNS falsos** — todo o seu tráfego de saída
 
 ### Print do cliente com configuração falsa
 
-<!-- Insira aqui o print do udhcpc/ip route com gateway 192.168.0.254 -->
+<img width="560" height="317" alt="image" src="https://github.com/user-attachments/assets/93e83071-83aa-4378-8c0e-59dccd78b183" />
+
 
 ---
 
